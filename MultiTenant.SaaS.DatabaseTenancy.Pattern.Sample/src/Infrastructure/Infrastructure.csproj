@@ -1,0 +1,19 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <AssemblyName>MultiTenant.SaaS.DatabaseTenancy.Pattern.Sample.Infrastructure</AssemblyName>
+    <RootNamespace>MultiTenant.SaaS.DatabaseTenancy.Pattern.Sample.Infrastructure</RootNamespace>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Kledex" Version="2.5.1" />
+    <PackageReference Include="Kledex.Validation.FluentValidation" Version="2.5.1" />
+    <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="6.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Extensions\" />
+  </ItemGroup>
+
+</Project>
