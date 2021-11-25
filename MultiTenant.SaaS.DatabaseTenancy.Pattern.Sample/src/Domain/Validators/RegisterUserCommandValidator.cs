@@ -12,15 +12,12 @@ namespace MultiTenant.SaaS.DatabaseTenancy.Pattern.Sample.Domain.Validators
         public RegisterUserCommandValidator()
         {
             RuleFor(p => p.CorrelationId)
-                .NotEmpty()
                 .NotEqual(Guid.Empty)
                 .WithMessage("CorrelationId is required");
 
             RuleFor(p => p.Email)
                 .NotEmpty()
-                .WithMessage("Email is required");
-
-            RuleFor(p => p.Email)
+                .WithMessage("Email is required")
                 .Must(RegexUtilities.IsValidEmail)
                 .WithMessage("Email is not valid");
         }

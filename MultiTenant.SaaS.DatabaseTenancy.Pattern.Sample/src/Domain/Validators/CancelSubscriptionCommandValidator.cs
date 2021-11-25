@@ -11,12 +11,10 @@ namespace MultiTenant.SaaS.DatabaseTenancy.Pattern.Sample.Domain.Validators
         public CancelSubscriptionCommandValidator()
         {
             RuleFor(p => p.CorrelationId)
-                .NotEmpty()
                 .NotEqual(Guid.Empty)
                 .WithMessage("CorrelationId is required");
 
             RuleFor(p => p.UserId)
-                .NotEmpty()
                 .NotEqual(Guid.Empty)
                 .WithMessage("UserId is required");
         }
