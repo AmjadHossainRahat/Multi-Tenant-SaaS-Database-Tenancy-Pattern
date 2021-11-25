@@ -1,0 +1,116 @@
+{
+	"info": {
+		"_postman_id": "97c69d1c-847d-4c1c-8fd8-f3a9976c95c6",
+		"name": "MultiTenant.SaaS.DatabaseTenancy.Pattern.Sample",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Register",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"CorrelationId\": \"253c40a9-7ebf-4ea3-90bc-e2428ec24bfa\",\r\n    \"Email\": \"hello@mail.com\",\r\n    \"ContactNumber\": \"0123456789\",\r\n    \"FirstName\": \"John\",\r\n    \"LastName\": \"Doe\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:5000/command/Register",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"command",
+						"Register"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "SubscribeAsync",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"CorrelationId\": \"253c40a9-7ebf-4ea3-90bc-e2428ec24bfa\",\r\n    \"UserId\": \"6f45a11c-ed61-4ecf-b408-707a3fd99283\",\r\n    \"Amount\": 100.00\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:5000/command/Subscribe",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"command",
+						"Subscribe"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Unsubscribe",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"CorrelationId\": \"253c40a9-7ebf-4ea3-90bc-e2428ec24bfa\",\r\n    \"UserId\": \"6f45a11c-ed61-4ecf-b408-707a3fd99283\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:5000/command/Unsubscribe",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"command",
+						"Unsubscribe"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Ping",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:5000/command/Ping",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"command",
+						"Ping"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
