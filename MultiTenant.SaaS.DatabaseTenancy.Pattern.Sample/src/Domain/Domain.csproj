@@ -9,7 +9,6 @@
   <ItemGroup>
     <Folder Include="Events\" />
     <Folder Include="EventHandlers\" />
-    <Folder Include="ValueObjects\" />
   </ItemGroup>
 
   <ItemGroup>

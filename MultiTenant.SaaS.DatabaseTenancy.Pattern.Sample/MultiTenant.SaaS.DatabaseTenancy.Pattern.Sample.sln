@@ -9,15 +9,15 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{99D60AF3-5ED
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "test", "test", "{684A903E-84AA-4536-8522-B9871FDDAEBD}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebService.Tests", "test\WebService.Tests\WebService.Tests.csproj", "{BE8A2539-9900-46FD-886B-F28512F6FBCD}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebService.Tests", "test\WebService.Tests\WebService.Tests.csproj", "{BE8A2539-9900-46FD-886B-F28512F6FBCD}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Domain", "src\Domain\Domain.csproj", "{6FC6EF52-4BE2-4DF5-BCEC-B8D55ED346FB}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Domain", "src\Domain\Domain.csproj", "{6FC6EF52-4BE2-4DF5-BCEC-B8D55ED346FB}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DomainTests", "test\DomainTests\DomainTests.csproj", "{5C9448A8-FB8A-453F-AC17-43582E89B814}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DomainTests", "test\DomainTests\DomainTests.csproj", "{5C9448A8-FB8A-453F-AC17-43582E89B814}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Infrastructure", "src\Infrastructure\Infrastructure.csproj", "{1DBB75A3-9D2E-4938-9F0F-1103B8742B62}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Infrastructure", "src\Infrastructure\Infrastructure.csproj", "{1DBB75A3-9D2E-4938-9F0F-1103B8742B62}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "InfrastructureTests", "test\InfrastructureTests\InfrastructureTests.csproj", "{C027CB08-00B1-47C0-B741-3929F3CBD7BF}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "InfrastructureTests", "test\InfrastructureTests\InfrastructureTests.csproj", "{C027CB08-00B1-47C0-B741-3929F3CBD7BF}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

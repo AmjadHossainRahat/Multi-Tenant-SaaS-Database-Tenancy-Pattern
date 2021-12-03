@@ -9,6 +9,7 @@ using Kledex.Validation.FluentValidation.Extensions;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -16,7 +17,9 @@ using Microsoft.Extensions.Logging;
 using MultiTenant.SaaS.DatabaseTenancy.Pattern.Sample.Domain.CommandHandlers;
 using MultiTenant.SaaS.DatabaseTenancy.Pattern.Sample.Domain.Commands;
 using MultiTenant.SaaS.DatabaseTenancy.Pattern.Sample.Domain.Queries;
+using MultiTenant.SaaS.DatabaseTenancy.Pattern.Sample.Infrastructure.DBContexts;
 using MultiTenant.SaaS.DatabaseTenancy.Pattern.Sample.WebService.Controllers;
+using Newtonsoft.Json;
 
 namespace WebService
 {
@@ -32,7 +35,7 @@ namespace WebService
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddControllers();
+            //services.Configure<AppSettings>(Configuration.GetSection(AppSettings.AppSettingsKey));
 
             services
             .AddKledex(options =>
@@ -51,6 +54,27 @@ namespace WebService
                     options.ValidateAllCommands = true;
                 }
             );
+
+
+            services.AddDbContext<UserManagementDbContext>(options => {
+                options.UseCosmos(
+                    accountEndpoint: this.Configuration.GetValue<string>("Cosmos:AccountEndpoint"),
+                    accountKey: this.Configuration.GetValue<string>("Cosmos:AccountKey"),
+                    databaseName: this.Configuration.GetValue<string>("Cosmos:UMDatabaseName")
+                );
+            });
+
+            services.AddDbContext<SharedDbContext>(options => {
+                options.UseCosmos(
+                    accountEndpoint: this.Configuration.GetValue<string>("Cosmos:AccountEndpoint"),
+                    accountKey: this.Configuration.GetValue<string>("Cosmos:AccountKey"),
+                    databaseName: this.Configuration.GetValue<string>("Cosmos:SharedDatabaseName")
+                );
+            });
+            
+            services.AddDbContext<TenantBasedDynamicDbContext>();
+
+            services.AddControllers();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
