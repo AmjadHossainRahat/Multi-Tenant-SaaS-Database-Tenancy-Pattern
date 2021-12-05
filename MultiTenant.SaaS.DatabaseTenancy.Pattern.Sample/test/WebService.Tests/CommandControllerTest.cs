@@ -143,7 +143,7 @@ namespace WebService.Tests
             CancelSubscriptionCommand command = new CancelSubscriptionCommand()
             {
                 CorrelationId = Guid.NewGuid(),
-                UserId = Guid.NewGuid(),
+                Id = Guid.NewGuid(),
             };
 
             string message = "User does not exist with this Id";
@@ -165,7 +165,7 @@ namespace WebService.Tests
             CancelSubscriptionCommand command = new CancelSubscriptionCommand()
             {
                 CorrelationId = Guid.NewGuid(),
-                UserId = Guid.NewGuid(),
+                Id = Guid.NewGuid(),
             };
 
             ObjectResult expected = new AcceptedResult();

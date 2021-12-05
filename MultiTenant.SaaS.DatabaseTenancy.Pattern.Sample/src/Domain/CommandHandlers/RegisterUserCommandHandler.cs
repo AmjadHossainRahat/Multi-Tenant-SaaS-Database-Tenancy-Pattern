@@ -3,8 +3,10 @@ using Microsoft.Extensions.Configuration;
 using MultiTenant.SaaS.DatabaseTenancy.Pattern.Sample.Domain.Commands;
 using MultiTenant.SaaS.DatabaseTenancy.Pattern.Sample.Infrastructure.DBContexts;
 using MultiTenant.SaaS.DatabaseTenancy.Pattern.Sample.Infrastructure.Entities;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -26,6 +28,7 @@ namespace MultiTenant.SaaS.DatabaseTenancy.Pattern.Sample.Domain.CommandHandlers
         {
             await this.userManagementDbContext.Database.EnsureCreatedAsync().ConfigureAwait(false);
             CommandResponse commandResponse = new CommandResponse();
+
             User user = new User
             {
                 Id = Guid.NewGuid(),
@@ -36,7 +39,6 @@ namespace MultiTenant.SaaS.DatabaseTenancy.Pattern.Sample.Domain.CommandHandlers
                 Contents = new List<DummyContent>() { },
                 IsArchived = false,
                 IsPaidUser = false,
-                TenantId = Guid.NewGuid(),  // assuming each user having a different tenant!!
                 LastUpdateDateTime = DateTime.UtcNow,
             };
 
@@ -59,8 +61,7 @@ namespace MultiTenant.SaaS.DatabaseTenancy.Pattern.Sample.Domain.CommandHandlers
             await this.sharedDbContext.Users.AddAsync(user).ConfigureAwait(false);
             await this.sharedDbContext.SaveChangesAsync().ConfigureAwait(false);
 
-            commandResponse.Result = user;
-
+            commandResponse.Result = new { user.Id, user.Email, user.FirstName, user.LastName };
             return commandResponse;
         }
     }

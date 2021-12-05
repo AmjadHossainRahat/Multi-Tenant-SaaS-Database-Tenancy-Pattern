@@ -1,4 +1,5 @@
 ﻿using Kledex.Commands;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using MultiTenant.SaaS.DatabaseTenancy.Pattern.Sample.Domain.Commands;
 using MultiTenant.SaaS.DatabaseTenancy.Pattern.Sample.Infrastructure.DBContexts;
@@ -18,17 +19,20 @@ namespace MultiTenant.SaaS.DatabaseTenancy.Pattern.Sample.Domain.CommandHandlers
         private readonly SharedDbContext sharedDbContext;
         private readonly TenantBasedDynamicDbContext tenantBasedDynamicDbContext;
         private readonly IConfiguration configuration;
+        private readonly IHttpContextAccessor httpContextAccessor;
 
         public SubscribeCommandHandler(
             UserManagementDbContext userManagementDbContext,
             SharedDbContext sharedDbContext,
             TenantBasedDynamicDbContext tenantBasedDynamicDbContext,
-            IConfiguration configuration)
+            IConfiguration configuration,
+            IHttpContextAccessor httpContextAccessor)
         {
             this.userManagementDbContext = userManagementDbContext;
             this.sharedDbContext = sharedDbContext;
             this.tenantBasedDynamicDbContext = tenantBasedDynamicDbContext;
             this.configuration = configuration;
+            this.httpContextAccessor = httpContextAccessor;
         }
 
         public async Task<CommandResponse> HandleAsync(SubscribeCommand command)
@@ -49,20 +53,23 @@ namespace MultiTenant.SaaS.DatabaseTenancy.Pattern.Sample.Domain.CommandHandlers
 
             await this.ChangeDatabaseOfTheUser(user, mapping).ConfigureAwait(false);
 
+            response.Result = new { user.Id, user.TenantId, user.Email, user.FirstName, user.LastName };
             return response;
         }
 
         private async Task ChangeDatabaseOfTheUser(User user, UserAndDatabaseNameMapping mapping)
         {
             //TODO: use event->command to do following tasks for reducing responsibility of this class
-
-            user.IsArchived = true;
-            user.IsPaidUser = true;
-            user.LastUpdateDateTime = DateTime.UtcNow;
-            this.sharedDbContext.Users.Update(user);
+            // delete the user from shared database
+            this.sharedDbContext.Users.Remove(user);
             await this.sharedDbContext.SaveChangesAsync().ConfigureAwait(false);
 
+            user.IsPaidUser = true;
+            user.LastUpdateDateTime = DateTime.UtcNow;
             user.Contents = SubscribeCommandHandler.GetDummyContents(user);
+
+            string tenantId = this.httpContextAccessor.HttpContext.Request.Headers["Tenant-Id"].First();
+            user.TenantId = Guid.Parse(tenantId);
 
             await this.tenantBasedDynamicDbContext.Users.AddAsync(user).ConfigureAwait(false);
             foreach(DummyContent content in user.Contents)
@@ -79,9 +86,9 @@ namespace MultiTenant.SaaS.DatabaseTenancy.Pattern.Sample.Domain.CommandHandlers
             await this.userManagementDbContext.SaveChangesAsync().ConfigureAwait(false);
         }
 
-        private static IEnumerable<DummyContent> GetDummyContents(User user)
+        private static List<DummyContent> GetDummyContents(User user)
         {
-            IEnumerable<DummyContent> contents = new List<DummyContent>
+            List<DummyContent> contents = new List<DummyContent>
             {
                 new DummyContent()
                 {

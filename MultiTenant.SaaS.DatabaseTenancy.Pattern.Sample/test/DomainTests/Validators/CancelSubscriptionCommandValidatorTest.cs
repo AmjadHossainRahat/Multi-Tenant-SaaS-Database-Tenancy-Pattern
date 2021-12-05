@@ -26,7 +26,7 @@ namespace DomainTests.Validators
             CancelSubscriptionCommand command = new CancelSubscriptionCommand()
             {
                 CorrelationId = Guid.Empty,
-                UserId = Guid.NewGuid(),
+                Id = Guid.NewGuid(),
             };
 
             ValidationResult expected = new ValidationResult();
@@ -48,7 +48,7 @@ namespace DomainTests.Validators
             CancelSubscriptionCommand command = new CancelSubscriptionCommand()
             {
                 CorrelationId = Guid.NewGuid(),
-                UserId = Guid.Empty,
+                Id = Guid.Empty,
             };
 
             ValidationResult expected = new ValidationResult();
@@ -70,7 +70,7 @@ namespace DomainTests.Validators
             CancelSubscriptionCommand command = new CancelSubscriptionCommand()
             {
                 CorrelationId = Guid.NewGuid(),
-                UserId = Guid.NewGuid(),
+                Id = Guid.NewGuid(),
             };
 
             ValidationResult result = await this.validator.ValidateAsync(command).ConfigureAwait(false);

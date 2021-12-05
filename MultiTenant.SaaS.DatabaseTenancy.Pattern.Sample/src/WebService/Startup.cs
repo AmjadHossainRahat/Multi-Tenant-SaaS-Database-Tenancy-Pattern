@@ -77,7 +77,13 @@ namespace WebService
             services.AddDbContext<TenantBasedDynamicDbContext>((serviceProvider, dbContextBuilder) =>
             {
                 var httpContextAccessor = serviceProvider.GetRequiredService<IHttpContextAccessor>();
-                var tenantId = httpContextAccessor.HttpContext.Request.Headers["Tenant-Id"].First();
+                string tenantId = httpContextAccessor.HttpContext.Request.Headers["Tenant-Id"].First();
+
+                Guid tenantIdAsGuid = Guid.Empty;
+                if (string.IsNullOrEmpty(tenantId) || !Guid.TryParse(tenantId, out tenantIdAsGuid))
+                {
+                    throw new Exception("Tenant-Id header must be a valid Guid");
+                }
 
                 string accountEndpoint = this.Configuration.GetValue<string>("Cosmos:AccountEndpoint");
                 string accountKey = this.Configuration.GetValue<string>("Cosmos:AccountKey");

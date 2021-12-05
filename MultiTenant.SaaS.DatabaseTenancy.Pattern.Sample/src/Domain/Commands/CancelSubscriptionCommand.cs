@@ -9,7 +9,6 @@ namespace MultiTenant.SaaS.DatabaseTenancy.Pattern.Sample.Domain.Commands
     {
         public Guid CorrelationId { get; set; }
         
-        // overriding parents member type
-        public new Guid UserId { get; set; }
+        public Guid Id { get; set; }
     }
 }

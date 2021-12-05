@@ -1,8 +1,10 @@
 ﻿using Kledex;
+using Kledex.Commands;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using MultiTenant.SaaS.DatabaseTenancy.Pattern.Sample.Domain.Commands;
 using MultiTenant.SaaS.DatabaseTenancy.Pattern.Sample.Domain.Queries;
+using MultiTenant.SaaS.DatabaseTenancy.Pattern.Sample.Infrastructure.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -53,10 +55,10 @@ namespace MultiTenant.SaaS.DatabaseTenancy.Pattern.Sample.WebService.Controllers
             }
 
             this.logger.LogInformation("Command/Register going to send command");
-            await this.dispatcher.SendAsync(command).ConfigureAwait(false);
+            object response = await this.dispatcher.SendAsync<object>(command).ConfigureAwait(false);
 
             this.logger.LogInformation($"Command/Register Returning Accepted {command.CorrelationId}");
-            return this.Accepted();
+            return this.Ok(response);
         }
 
         [HttpPost]
@@ -80,10 +82,10 @@ namespace MultiTenant.SaaS.DatabaseTenancy.Pattern.Sample.WebService.Controllers
             }
 
             this.logger.LogInformation("Command/Subscribe going to send command");
-            await this.dispatcher.SendAsync(command).ConfigureAwait(false);
+            object response = await this.dispatcher.SendAsync<object>(command).ConfigureAwait(false);
 
             this.logger.LogInformation($"Command/Subscribe Returning Accepted {command.CorrelationId}");
-            return this.Accepted();
+            return this.Ok(response);
         }
 
         [HttpPost]
@@ -94,7 +96,7 @@ namespace MultiTenant.SaaS.DatabaseTenancy.Pattern.Sample.WebService.Controllers
             UsersExistenceQuery usersExistanceQuery = new UsersExistenceQuery
             {
                 CorrelationId = command.CorrelationId,
-                UserId = command.UserId,
+                UserId = command.Id,
             };
 
             this.logger.LogInformation("Going to validate users existence");
@@ -107,10 +109,10 @@ namespace MultiTenant.SaaS.DatabaseTenancy.Pattern.Sample.WebService.Controllers
             }
 
             this.logger.LogInformation("Command/Unsubscribe going to send command");
-            await this.dispatcher.SendAsync(command).ConfigureAwait(false);
+            object response = await this.dispatcher.SendAsync<object>(command).ConfigureAwait(false);
 
             this.logger.LogInformation($"Command/Unsubscribe Returning Accepted {command.CorrelationId}");
-            return this.Accepted();
+            return this.Ok(response);
         }
     }
 }

@@ -16,6 +16,6 @@ namespace MultiTenant.SaaS.DatabaseTenancy.Pattern.Sample.Infrastructure.Entitie
 
         public bool IsPaidUser { get; set; }
 
-        public IEnumerable<DummyContent> Contents { get; set; }
+        public ICollection<DummyContent> Contents { get; set; }
     }
 }
