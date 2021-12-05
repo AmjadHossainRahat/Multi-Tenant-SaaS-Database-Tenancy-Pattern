@@ -67,7 +67,7 @@ namespace MultiTenant.SaaS.DatabaseTenancy.Pattern.Sample.WebService.Controllers
             UsersExistenceQuery usersExistanceQuery = new UsersExistenceQuery
             {
                 CorrelationId = command.CorrelationId,
-                UserId = command.UserId,
+                UserId = command.Id,
             };
 
             this.logger.LogInformation("Going to validate users existence");

@@ -26,7 +26,7 @@ namespace DomainTests.Validators
             SubscribeCommand command = new SubscribeCommand()
             {
                 CorrelationId = Guid.Empty,
-                UserId = Guid.NewGuid(),
+                Id = Guid.NewGuid(),
                 Amount = 100.00m,
             };
 
@@ -49,7 +49,7 @@ namespace DomainTests.Validators
             SubscribeCommand command = new SubscribeCommand()
             {
                 CorrelationId = Guid.NewGuid(),
-                UserId = Guid.Empty,
+                Id = Guid.Empty,
             };
 
             ValidationResult expected = new ValidationResult();
@@ -71,7 +71,7 @@ namespace DomainTests.Validators
             SubscribeCommand command = new SubscribeCommand()
             {
                 CorrelationId = Guid.NewGuid(),
-                UserId = Guid.NewGuid(),
+                Id = Guid.NewGuid(),
                 Amount = 0.0m
             };
 
@@ -94,7 +94,7 @@ namespace DomainTests.Validators
             SubscribeCommand command = new SubscribeCommand()
             {
                 CorrelationId = Guid.NewGuid(),
-                UserId = Guid.NewGuid(),
+                Id = Guid.NewGuid(),
                 Amount = 100.00m,
             };
 

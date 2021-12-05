@@ -8,10 +8,10 @@ namespace MultiTenant.SaaS.DatabaseTenancy.Pattern.Sample.Infrastructure.DBConte
 {
     public class UserManagementDbContext : DbContext
     {
-        public DbSet<User> Users { get; set; }
+        public DbSet<UserAndDatabaseNameMapping> UserDatabaseMappings { get; set; }
         public UserManagementDbContext(DbContextOptions<UserManagementDbContext> options) : base(options)
         {
-
+            this.Database.EnsureCreated();
         }
     }
 }

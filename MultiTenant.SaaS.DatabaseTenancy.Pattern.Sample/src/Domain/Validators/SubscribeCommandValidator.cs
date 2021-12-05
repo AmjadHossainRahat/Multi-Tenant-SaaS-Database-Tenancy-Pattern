@@ -14,7 +14,7 @@ namespace MultiTenant.SaaS.DatabaseTenancy.Pattern.Sample.Domain.Validators
                 .NotEqual(Guid.Empty)
                 .WithMessage("CorrelationId is required");
 
-            RuleFor(p => p.UserId)
+            RuleFor(p => p.Id)
                 .NotEqual(Guid.Empty)
                 .WithMessage("UserId is required");
 

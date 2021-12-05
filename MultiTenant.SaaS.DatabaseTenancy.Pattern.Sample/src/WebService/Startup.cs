@@ -8,6 +8,7 @@ using Kledex.Extensions;
 using Kledex.Validation.FluentValidation.Extensions;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -72,9 +73,23 @@ namespace WebService
                 );
             });
             
-            services.AddDbContext<TenantBasedDynamicDbContext>();
+            services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+            services.AddDbContext<TenantBasedDynamicDbContext>((serviceProvider, dbContextBuilder) =>
+            {
+                var httpContextAccessor = serviceProvider.GetRequiredService<IHttpContextAccessor>();
+                var tenantId = httpContextAccessor.HttpContext.Request.Headers["Tenant-Id"].First();
 
-            services.AddControllers();
+                string accountEndpoint = this.Configuration.GetValue<string>("Cosmos:AccountEndpoint");
+                string accountKey = this.Configuration.GetValue<string>("Cosmos:AccountKey");
+                string dynamicDatabaseNamePrefix = this.Configuration.GetValue<string>("Cosmos:DynamicDatabaseNamePrefix");
+
+                string databaseName = $"{dynamicDatabaseNamePrefix}{tenantId}";
+
+                dbContextBuilder.UseCosmos(accountEndpoint, accountKey, databaseName);
+            });
+
+            services
+                .AddControllers();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

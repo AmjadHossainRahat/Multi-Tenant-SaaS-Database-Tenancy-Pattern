@@ -9,8 +9,7 @@ namespace MultiTenant.SaaS.DatabaseTenancy.Pattern.Sample.Domain.Commands
     {
         public Guid CorrelationId { get; set; }
 
-        // overriding parents property type
-        public new Guid UserId { get; set; }
+        public Guid Id { get; set; }
 
         public Decimal Amount { get; set; }
     }

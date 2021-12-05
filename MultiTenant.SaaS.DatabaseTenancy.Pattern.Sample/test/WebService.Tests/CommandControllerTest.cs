@@ -98,7 +98,7 @@ namespace WebService.Tests
             SubscribeCommand command = new SubscribeCommand()
             {
                 CorrelationId = Guid.NewGuid(),
-                UserId = Guid.NewGuid(),
+                Id = Guid.NewGuid(),
                 Amount = 100.00m,
             };
 
@@ -121,7 +121,7 @@ namespace WebService.Tests
             SubscribeCommand command = new SubscribeCommand()
             {
                 CorrelationId = Guid.NewGuid(),
-                UserId = Guid.NewGuid(),
+                Id = Guid.NewGuid(),
                 Amount = 100.00m,
             };
 

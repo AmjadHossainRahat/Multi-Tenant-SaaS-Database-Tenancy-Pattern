@@ -1,7 +1,12 @@
 ﻿using Kledex.Commands;
+using Microsoft.Extensions.Configuration;
 using MultiTenant.SaaS.DatabaseTenancy.Pattern.Sample.Domain.Commands;
+using MultiTenant.SaaS.DatabaseTenancy.Pattern.Sample.Infrastructure.DBContexts;
+using MultiTenant.SaaS.DatabaseTenancy.Pattern.Sample.Infrastructure.Entities;
 using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -9,9 +14,102 @@ namespace MultiTenant.SaaS.DatabaseTenancy.Pattern.Sample.Domain.CommandHandlers
 {
     public class SubscribeCommandHandler : ICommandHandlerAsync<SubscribeCommand>
     {
+        private readonly UserManagementDbContext userManagementDbContext;
+        private readonly SharedDbContext sharedDbContext;
+        private readonly TenantBasedDynamicDbContext tenantBasedDynamicDbContext;
+        private readonly IConfiguration configuration;
+
+        public SubscribeCommandHandler(
+            UserManagementDbContext userManagementDbContext,
+            SharedDbContext sharedDbContext,
+            TenantBasedDynamicDbContext tenantBasedDynamicDbContext,
+            IConfiguration configuration)
+        {
+            this.userManagementDbContext = userManagementDbContext;
+            this.sharedDbContext = sharedDbContext;
+            this.tenantBasedDynamicDbContext = tenantBasedDynamicDbContext;
+            this.configuration = configuration;
+        }
+
         public async Task<CommandResponse> HandleAsync(SubscribeCommand command)
         {
-            throw new NotImplementedException();
+            CommandResponse response = new CommandResponse();
+
+            UserAndDatabaseNameMapping mapping = this.userManagementDbContext.UserDatabaseMappings.Where(p => p.UserId == command.Id).FirstOrDefault();
+            if (mapping == null)
+            {
+                response.Result = new { StatusCode = HttpStatusCode.BadRequest, Message = "User does not exist" };
+            }
+
+            User user = await this.sharedDbContext.Users.FindAsync(command.Id).ConfigureAwait(false);
+            if (user == null)
+            {
+                response.Result = new { StatusCode = HttpStatusCode.BadRequest, Message = "User does not exist" };
+            }
+
+            await this.ChangeDatabaseOfTheUser(user, mapping).ConfigureAwait(false);
+
+            return response;
+        }
+
+        private async Task ChangeDatabaseOfTheUser(User user, UserAndDatabaseNameMapping mapping)
+        {
+            //TODO: use event->command to do following tasks for reducing responsibility of this class
+
+            user.IsArchived = true;
+            user.IsPaidUser = true;
+            user.LastUpdateDateTime = DateTime.UtcNow;
+            this.sharedDbContext.Users.Update(user);
+            await this.sharedDbContext.SaveChangesAsync().ConfigureAwait(false);
+
+            user.Contents = SubscribeCommandHandler.GetDummyContents(user);
+
+            await this.tenantBasedDynamicDbContext.Users.AddAsync(user).ConfigureAwait(false);
+            foreach(DummyContent content in user.Contents)
+            {
+                await this.tenantBasedDynamicDbContext.Contents.AddAsync(content).ConfigureAwait(false);
+            }
+            
+            await this.tenantBasedDynamicDbContext.SaveChangesAsync().ConfigureAwait(false);
+
+            string databaseNamePrefix = this.configuration.GetValue<string>("Cosmos:DynamicDatabaseNamePrefix");
+            mapping.DatabaseName = $"{databaseNamePrefix}{user.TenantId.ToString()}";
+            mapping.LastUpdateDateTime = DateTime.UtcNow;
+            this.userManagementDbContext.Update(mapping);
+            await this.userManagementDbContext.SaveChangesAsync().ConfigureAwait(false);
+        }
+
+        private static IEnumerable<DummyContent> GetDummyContents(User user)
+        {
+            IEnumerable<DummyContent> contents = new List<DummyContent>
+            {
+                new DummyContent()
+                {
+                    CreationDateTime = DateTime.UtcNow,
+                    Id = Guid.NewGuid(),
+                    User = user,
+                    UserId = user.Id,
+                    Item1 = "item-1",
+                    Item2 = "item-2",
+                    Item3 = "item-3",
+                    IsArchived = false,
+                    LastUpdateDateTime = DateTime.UtcNow,
+                },
+                new DummyContent()
+                {
+                    CreationDateTime = DateTime.UtcNow,
+                    Id = Guid.NewGuid(),
+                    User = user,
+                    UserId = user.Id,
+                    Item1 = "item-1",
+                    Item2 = "item-2",
+                    Item3 = "item-3",
+                    IsArchived = false,
+                    LastUpdateDateTime = DateTime.UtcNow,
+                },
+            };
+
+            return contents;
         }
     }
 }
