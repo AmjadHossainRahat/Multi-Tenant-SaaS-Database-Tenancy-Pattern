@@ -36,11 +36,12 @@ namespace MultiTenant.SaaS.DatabaseTenancy.Pattern.Sample.Domain.CommandHandlers
                 FirstName = command.FirstName,
                 LastName = command.LastName,
                 CreationDateTime = DateTime.UtcNow,
-                Contents = new List<DummyContent>() { },
                 IsArchived = false,
                 IsPaidUser = false,
                 LastUpdateDateTime = DateTime.UtcNow,
             };
+            user.Contents = RegisterUserCommandHandler.GetDummyContents(user);
+
 
             UserAndDatabaseNameMapping userDatabaseMapping = new UserAndDatabaseNameMapping
             {
@@ -61,8 +62,41 @@ namespace MultiTenant.SaaS.DatabaseTenancy.Pattern.Sample.Domain.CommandHandlers
             await this.sharedDbContext.Users.AddAsync(user).ConfigureAwait(false);
             await this.sharedDbContext.SaveChangesAsync().ConfigureAwait(false);
 
-            commandResponse.Result = new { user.Id, user.Email, user.FirstName, user.LastName };
+            commandResponse.Result = new { user.Id, user.Email, user.FirstName, user.LastName, Contents = user.Contents.ToArray() };
             return commandResponse;
+        }
+
+        private static List<DummyContent> GetDummyContents(User user)
+        {
+            List<DummyContent> contents = new List<DummyContent>
+            {
+                new DummyContent()
+                {
+                    CreationDateTime = DateTime.UtcNow,
+                    Id = Guid.NewGuid(),
+                    User = user,
+                    UserId = user.Id,
+                    Item1 = "item-1",
+                    Item2 = "item-2",
+                    Item3 = "item-3",
+                    IsArchived = false,
+                    LastUpdateDateTime = DateTime.UtcNow,
+                },
+                new DummyContent()
+                {
+                    CreationDateTime = DateTime.UtcNow,
+                    Id = Guid.NewGuid(),
+                    User = user,
+                    UserId = user.Id,
+                    Item1 = "item-1",
+                    Item2 = "item-2",
+                    Item3 = "item-3",
+                    IsArchived = false,
+                    LastUpdateDateTime = DateTime.UtcNow,
+                },
+            };
+
+            return contents;
         }
     }
 }

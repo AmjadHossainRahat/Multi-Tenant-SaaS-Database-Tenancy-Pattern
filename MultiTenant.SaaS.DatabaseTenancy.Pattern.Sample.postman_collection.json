@@ -11,8 +11,8 @@
 				"method": "POST",
 				"header": [],
 				"body": {
-					"mode": "raw",
-					"raw": "{\r\n    \"CorrelationId\": \"253c40a9-7ebf-4ea3-90bc-e2428ec24bfa\",\r\n    \"Email\": \"hello@mail.com\",\r\n    \"ContactNumber\": \"0123456789\",\r\n    \"FirstName\": \"John\",\r\n    \"LastName\": \"Doe\"\r\n}",
+					"mode": "formdata",
+					"formdata": [],
 					"options": {
 						"raw": {
 							"language": "json"
@@ -38,10 +38,16 @@
 			"name": "SubscribeAsync",
 			"request": {
 				"method": "POST",
-				"header": [],
+				"header": [
+					{
+						"key": "Tenant-Id",
+						"value": "253c40a9-7ebf-4ea3-90bc-e2428ec24bfa",
+						"type": "text"
+					}
+				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"CorrelationId\": \"253c40a9-7ebf-4ea3-90bc-e2428ec24bfa\",\r\n    \"UserId\": \"6f45a11c-ed61-4ecf-b408-707a3fd99283\",\r\n    \"Amount\": 100.00\r\n}",
+					"raw": "{\r\n    \"CorrelationId\": \"253c40a9-7ebf-4ea3-90bc-e2428ec24bfa\",\r\n    \"Id\": \"9cecd34b-1e7d-43a5-959f-c152e5554d2c\",\r\n    \"Amount\": 100.00\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -67,10 +73,16 @@
 			"name": "Unsubscribe",
 			"request": {
 				"method": "POST",
-				"header": [],
+				"header": [
+					{
+						"key": "Tenant-Id",
+						"value": "253c40a9-7ebf-4ea3-90bc-e2428ec24bfa",
+						"type": "text"
+					}
+				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"CorrelationId\": \"253c40a9-7ebf-4ea3-90bc-e2428ec24bfa\",\r\n    \"UserId\": \"6f45a11c-ed61-4ecf-b408-707a3fd99283\"\r\n}",
+					"raw": "{\r\n    \"CorrelationId\": \"253c40a9-7ebf-4ea3-90bc-e2428ec24bfa\",\r\n    \"Id\": \"9cecd34b-1e7d-43a5-959f-c152e5554d2c\"\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
