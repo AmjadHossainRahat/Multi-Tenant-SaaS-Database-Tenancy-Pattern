@@ -28,7 +28,7 @@ It's an experiemntal sample project to explore [Multi-tenant SaaS database tenan
     - A mapping gets created into "User Management Database"
 - User can subscribe as a paid user
     -
-    - A tenant specific database gets created
+    - A tenant specific database gets created dynamically based on tenant-id found in the header of the request
     - User and its related data copied and gets inserted in new "Tenant Specific Database" after some modification 
     - Mapping for the user in "User Managemnt Database" gets updated
     - User and its related records gets deleted from the "Shared Database"
@@ -36,7 +36,7 @@ It's an experiemntal sample project to explore [Multi-tenant SaaS database tenan
     -
     - User and its related data goes back to "Shared Database"
     - Mapping for the user in "User Managemnt Database" gets updated
-    - The tennat specific database that was created for the use gets deleted
+    - The tennat specific database that was created for the user gets deleted
 
 
 ## API Reference
